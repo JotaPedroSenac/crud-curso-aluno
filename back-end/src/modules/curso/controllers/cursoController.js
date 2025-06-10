@@ -1,4 +1,5 @@
-const Curso = require('../models/cursoModel');
+// const Curso = require('../models/cursoModel');
+const {Aluno, Curso} = require('../../index');
 
 class CursoController {
   static async criar(req, res) {
@@ -34,6 +35,9 @@ class CursoController {
     try {
       const { cod_curso } = req.params;
       const { nome } = req.body;
+
+      console.log('params:', req.params);
+      console.log('body:', req.body);
 
       if (!cod_curso || !nome) {
         return res.status(400).json({ mensagem: 'Todos os campos devem ser preenchidos' });

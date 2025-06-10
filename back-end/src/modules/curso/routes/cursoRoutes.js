@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', CursoController.criar);
 router.get('/', CursoController.listar);
-router.put('/:matricula', CursoController.atualizar);
-router.delete('/:matricula', CursoController.deletar);
+router.put('/:cod_curso', CursoController.atualizar);
+router.delete('/:cod_curso', CursoController.deletar);
 
 module.exports = router;

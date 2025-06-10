@@ -1,5 +1,6 @@
-const Aluno = require('../models/alunoModel');
-const Curso = require('../../curso/models/cursoModel');
+// const Aluno = require('../models/alunoModel');
+// const Curso = require('../../curso/models/cursoModel');
+const {Aluno, Curso} = require('../../index');
 
 class AlunoController {
     static async criar(req, res) {
