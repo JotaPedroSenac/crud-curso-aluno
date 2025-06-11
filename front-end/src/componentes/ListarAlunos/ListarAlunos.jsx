@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import CursoService from "../../services/cursoService";
+import AlunoService from "../../services/alunoService";
 
-function ListarCursos(){
+function ListarAlunos(){
 
     // Estado para armazenar os cursos
-    const [cursos, setCursos] = useState([]); //array pq será recebido uma lista
+    const [alunos, setAlunos] = useState([]); //array pq será recebido uma lista
     // função para carregar a lista de cursos
     const carregar = async() => {
-        const lista = await CursoService.listar()
+        const lista = await AlunoService.listar()
         console.log(lista)
-        setCursos(Array.isArray(lista) ? lista : []) // atualizar o Estado com a lista recebida. Se tiver nada, retorna um array vazio
+        setAlunos(Array.isArray(lista) ? lista : []) // atualizar o Estado com a lista recebida. Se tiver nada, retorna um array vazio
     }
 
     // executa a função carregar ao montar o componente (deixar reativo)
@@ -19,24 +19,26 @@ function ListarCursos(){
     // console.log(cursos)
     return(
         <>
-            <h1>Listagem de cursos</h1>
+            <h1>Listagem de Alunos</h1>
             {/* estruturas lógicas são feitas entre bigodinhos */}
             {
-                cursos.length === 0 ? (
-                    <p>Nenhum curso cadastrado no sistema.</p>
+                alunos.length === 0 ? (
+                    <p>Nenhum aluno cadastrado no sistema.</p>
                 ):
                 (
                     <table>
                         <thead>
-                            <th>Código</th>
+                            <th>Matricula</th>
                             <th>Nome</th>
+                            {/* <th>Curso</th> */}
                         </thead>
                         <tbody>
                             {
-                                cursos.map((c) =>(
-                                    <tr  key={c.cod_curso}>
-                                        <td>{c.cod_curso}</td>
-                                        <td>{c.nome}</td>
+                                alunos.map((a) =>(
+                                    <tr  key={a.matricula}>
+                                        <td>{a.matricula}</td>
+                                        <td>{a.nome}</td>
+                                        {/* <td>{a.nome}</td> */}
                                     </tr>
                                     
                                 ))
@@ -49,4 +51,4 @@ function ListarCursos(){
     )
 }
 
-export default ListarCursos;
+export default ListarAlunos;
