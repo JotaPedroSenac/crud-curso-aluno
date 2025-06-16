@@ -17,6 +17,18 @@ function ListarCursos(){
         carregar();
     }, [])
     // console.log(cursos)
+
+    const deletar = async(cod_curso) =>{
+        const res = confirm("Deseja deletar esse curso?");
+        if (res) {
+            await CursoService.deletar(cod_curso);
+            carregar();
+        }
+    }
+
+    const editar = async(curso) => {
+        setCursoEmEdicao(curso)
+    }
     return(
         <>
             <h1>Listagem de cursos</h1>
@@ -37,6 +49,12 @@ function ListarCursos(){
                                     <tr  key={c.cod_curso}>
                                         <td>{c.cod_curso}</td>
                                         <td>{c.nome}</td>
+                                        <td>
+                                            <button onClick={() => editar(c.cod_curso)}>Editar</button>
+                                        </td>
+                                        <td>
+                                            <button onClick={() => editar(c)}>Editar</button>
+                                        </td>
                                     </tr>
                                     
                                 ))
