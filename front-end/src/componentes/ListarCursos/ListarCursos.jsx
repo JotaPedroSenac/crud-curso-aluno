@@ -1,67 +1,72 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; // importas os hooks do react
 import CursoService from "../../services/cursoService";
 
-function ListarCursos(){
+function ListarCursos({aoEditar}) {
+    //Estado para armazenar os cursos
+    const [cursos, setCursos] = useState([]);
 
-    // Estado para armazenar os cursos
-    const [cursos, setCursos] = useState([]); //array pq será recebido uma lista
-    // função para carregar a lista de cursos
-    const carregar = async() => {
-        const lista = await CursoService.listar()
-        console.log(lista)
-        setCursos(Array.isArray(lista) ? lista : []) // atualizar o Estado com a lista recebida. Se tiver nada, retorna um array vazio
+    //Função para carregar a lista de cursos 
+    const carregar = async () => {
+        const lista = await CursoService.listar();
+        console.log(lista);
+        // Atualiza o estado (cursos) com a lista recebida, caso não receba um array é setado um array vazio para o estado.
+        setCursos(Array.isArray(lista) ? lista : []);
     }
 
-    // executa a função carregar ao montar o componente (deixar reativo)
-    useEffect(() => {
-        carregar();
-    }, [])
-    // console.log(cursos)
-
-    const deletar = async(cod_curso) =>{
-        const res = confirm("Deseja deletar esse curso?");
-        if (res) {
-            await CursoService.deletar(cod_curso);
-            carregar();
+    //Função para deletar curso
+    const deletar = async (cod_curso, nome) => {
+        const confirm = window.confirm(`Deseja mesmo deletar o curso ${nome} ?`);
+        if (confirm) {
+            const res = await CursoService.deletar(cod_curso);
+            console.log(res)
+            if (res) {
+                alert('Curso deletado com sucesso!');
+                carregar();
+            } else {
+                alert('Erro ao deletar!');
+            }
         }
     }
 
-    const editar = async(curso) => {
-        setCursoEmEdicao(curso)
-    }
-    return(
+    //Executa a função carregar ao montar o componente ([])
+    useEffect(() => {
+        carregar();
+    }, []);
+    return (
         <>
             <h1>Listagem de cursos</h1>
-            {/* estruturas lógicas são feitas entre bigodinhos */}
             {
-                cursos.length === 0 ? (
-                    <p>Nenhum curso cadastrado no sistema.</p>
-                ):
-                (
-                    <table>
-                        <thead>
-                            <th>Código</th>
-                            <th>Nome</th>
-                        </thead>
-                        <tbody>
-                            {
-                                cursos.map((c) =>(
-                                    <tr  key={c.cod_curso}>
-                                        <td>{c.cod_curso}</td>
-                                        <td>{c.nome}</td>
-                                        <td>
-                                            <button onClick={() => editar(c.cod_curso)}>Editar</button>
-                                        </td>
-                                        <td>
-                                            <button onClick={() => editar(c)}>Editar</button>
-                                        </td>
-                                    </tr>
-                                    
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                )
+                cursos.length === 0 ?
+                    (
+                        <p>Nenhum curso cadastrado no sistema.</p>
+                    )
+                    :
+                    (
+                        <table border={1}>
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nome</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    cursos.map((c) => (
+                                        <tr key={c.cod_curso}>
+                                            <td>{c.cod_curso}</td>
+                                            <td>{c.nome}</td>
+                                            <td>
+                                                <button onClick={() => aoEditar(c)}>Editar</button>
+                                                <button onClick={() => deletar(c.cod_curso, c.nome)}>Excluir</button>
+                                            </td>
+
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    )
             }
         </>
     )

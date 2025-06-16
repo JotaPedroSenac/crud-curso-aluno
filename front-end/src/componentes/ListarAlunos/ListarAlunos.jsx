@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AlunoService from "../../services/alunoService";
 
-function ListarAlunos(){
+function ListarAlunos({aoEditar}){
 
     // Estado para armazenar os cursos
     const [alunos, setAlunos] = useState([]); //array pq será recebido uma lista
@@ -10,6 +10,22 @@ function ListarAlunos(){
         const lista = await AlunoService.listar()
         console.log(lista)
         setAlunos(Array.isArray(lista) ? lista : []) // atualizar o Estado com a lista recebida. Se tiver nada, retorna um array vazio
+    }
+
+    
+    // deletar aluno
+    const deletar = async (matricula, nome) => {
+        const confirm = window.confirm(`Deseja deletar o aluno ${nome}?`)
+        if(confirm){
+            const res = await AlunoService.deletar(matricula);
+            console.log(res)
+            if (res) {
+                alert('Aluno deletado com sucesso!')
+                carregar()
+            }else{
+                alert('Erro ao deletar!')
+            }
+        }
     }
 
     // executa a função carregar ao montar o componente (deixar reativo)
@@ -26,11 +42,15 @@ function ListarAlunos(){
                     <p>Nenhum aluno cadastrado no sistema.</p>
                 ):
                 (
-                    <table>
+                    <table border={1}>
                         <thead>
-                            <th>Matricula</th>
-                            <th>Nome</th>
-                            {/* <th>Curso</th> */}
+                            <tr>
+                                <th>Matricula</th>
+                                <th>Nome</th>
+                                <th>cod. Curso</th>
+                                <th>Curso</th>
+                                <th>Ações</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {
@@ -38,7 +58,12 @@ function ListarAlunos(){
                                     <tr  key={a.matricula}>
                                         <td>{a.matricula}</td>
                                         <td>{a.nome}</td>
-                                        {/* <td>{a.nome}</td> */}
+                                        <td>{a.cod_curso}</td>
+                                        <td>{a.Curso.nome}</td>
+                                        <td>
+                                            <button onClick={() => aoEditar(a)}>Editar</button>
+                                            <button onClick={() => deletar(a.matricula, a.nome)}>Excluir</button>
+                                        </td>
                                     </tr>
                                     
                                 ))
